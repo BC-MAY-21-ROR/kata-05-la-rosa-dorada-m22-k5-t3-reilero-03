@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubycritic_small_badge'
 require 'rubycritic/rake_task'
 RubyCriticSmallBadge.configure do |config|
