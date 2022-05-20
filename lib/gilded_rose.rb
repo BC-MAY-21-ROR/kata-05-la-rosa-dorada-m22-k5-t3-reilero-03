@@ -16,6 +16,7 @@ class GildedRose
     end
   end
 
+  
   def check_type(item)
     if item.name != ITEMS[:AB] && item.name != ITEMS[:BPTATC]
       item.quality -= 1 if item.quality.positive? && (item.name != ITEMS[:SHOR])
