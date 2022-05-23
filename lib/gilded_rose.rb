@@ -33,7 +33,11 @@ class GildedRose
 
   def check_type(item)
     if item.name != ITEMS[:AB] && item.name != ITEMS[:BPTATC]
-      item.quality -= 1 if item.quality.positive? && (item.name != ITEMS[:SHOR])
+      if item.name == ITEMS[:CR]
+        item.quality -= 2
+      else
+        item.quality -= 1 if item.quality.positive? && (item.name != ITEMS[:SHOR])
+      end
     elsif item.quality < 50
       item.quality = item.quality + 1
       if item.name == ITEMS[:BPTATC]
@@ -44,6 +48,9 @@ class GildedRose
   end
 
   def check_quality(item)
+    if item.quality.negative?
+      item.quality = 0
+    end
     if item.sell_in.negative?
       if item.name != ITEMS[:AB]
         if item.name != ITEMS[:BPTATC]
@@ -72,7 +79,7 @@ class Item
   end
 end
 
-item_three = Item.new('Sulfuras, Hand of Ragnaros', 8, 70)
+item_three = Item.new('Conjured', 5, 10)
 
 arr_items = [item_three]
 
