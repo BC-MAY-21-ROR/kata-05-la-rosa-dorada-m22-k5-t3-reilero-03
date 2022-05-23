@@ -2,52 +2,60 @@
 
 class GildedRose
   ITEMS = { AB: 'Ages Brie', BPTATC: 'Backstage passes to a TAFKAL80ETC concert',
-            SHOR: 'Sulfuras, Hand of Ragnaros' }.freeze
+            SHOR: 'Sulfuras, Hand of Ragnaros', CR: 'Conjured' }.freeze
 
   def initialize(items)
     @items = items
   end
 
   def update_quality
-    @items.each do |item|
-      if item.name == ITEMS[:AB]
-        item.quality = item.quality + 1
-      end
-      if different_to_item_name(item, ITEMS[:AB]) && different_to_item_name(item, ITEMS[:BPTATC])
-        item.quality = item.quality - 1 if item.quality.positive? && (item.name != ITEMS[:SHOR])
-      elsif item.quality < 50
-        if item.name == ITEMS[:BPTATC]
-          item.quality = item.quality + 1 if item.sell_in < 11 && (item.quality < 50)
-          item.quality = item.quality + 1 if item.sell_in < 6 && (item.quality < 50)
-        end
-        item.quality = item.quality + 1
-      end
-      item.sell_in = item.sell_in - 1 if item.name != ITEMS[:SHOR]
-      if_sell_in_is_negative(item)
-    end
 
-  end
-
-  def different_to_item_name(item, name)
-    item.name != name
-  end
-  
-  def if_sell_in_is_negative(item)
-    different_name_aged_brie(item)
-  end
-
-  def different_name_aged_brie(item)
-    if item.name != 'Aged Brie'
-      if item.name != 'Backstage passes to a TAFKAL80ETC concert'
-        item.quality = item.quality - 1 if item.quality.positive? && (item.name != 'Sulfuras, Hand of Ragnaros')
+    @items.each do |x|
+      if check_if_quality_is_eighty(x)
+        return puts "#{x.name} no tiene que tener mas o menos de 80 de calidad"
+      elsif check_if_quality_is_more_fifty(x)
+        return puts "#{x.name} no tiene que tener mas de 50 de calidad"
       else
-        item.quality = item.quality - item.quality
+        check_type(x)
+        x.sell_in -= 1 if x.name != ITEMS[:SHOR]
+        check_quality(x)
       end
+    end
+  end
+
+  def check_if_quality_is_more_fifty(item)
+    item.name != ITEMS[:SHOR] && item.quality > 50
+  end
+
+  def check_if_quality_is_eighty(item)
+    item.name == ITEMS[:SHOR] && item.quality != 80
+  end
+
+  def check_type(item)
+    if item.name != ITEMS[:AB] && item.name != ITEMS[:BPTATC]
+      item.quality -= 1 if item.quality.positive? && (item.name != ITEMS[:SHOR])
     elsif item.quality < 50
       item.quality = item.quality + 1
+      if item.name == ITEMS[:BPTATC]
+        item.quality += 1 if item.sell_in <= 10 && (item.quality < 50)
+        item.quality += 1 if item.sell_in <= 5 && (item.quality < 50)
+      end
     end
   end
 
+  def check_quality(item)
+    if item.sell_in.negative?
+      if item.name != ITEMS[:AB]
+        if item.name != ITEMS[:BPTATC]
+          item.quality -= 1 if item.quality.positive? && (item.name != ITEMS[:SHOR])
+        else
+          item.quality -= item.quality
+        end
+      elsif item.quality < 50
+        item.quality += 1
+      end
+    end
+  end
 end
 
 class Item
@@ -64,11 +72,12 @@ class Item
   end
 end
 
-item_three = Item.new('Ages Brie', 5, 8)
+item_three = Item.new('Sulfuras, Hand of Ragnaros', 8, 70)
 
 arr_items = [item_three]
 
 x = GildedRose.new(arr_items)
+
 puts x.update_quality
 puts x.update_quality
 puts x.update_quality
