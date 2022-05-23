@@ -9,16 +9,16 @@ class GildedRose
   end
 
   def update_quality
-
     @items.each do |x|
-      if check_if_quality_is_eighty(x)
-        return puts "#{x.name} no tiene que tener mas o menos de 80 de calidad"
+      if check_if_quality_is_not_eighty(x)
+        return "#{x.name} tiene que ser 80 de calidad"
       elsif check_if_quality_is_more_fifty(x)
-        return puts "#{x.name} no tiene que tener mas de 50 de calidad"
+        return "#{x.name} no tiene que tener mas de 50 de calidad"
       else
         check_type(x)
         x.sell_in -= 1 if x.name != ITEMS[:SHOR]
         check_quality(x)
+        return "#{x.name}, #{x.sell_in}, #{x.quality}"
       end
     end
   end
@@ -27,7 +27,7 @@ class GildedRose
     item.name != ITEMS[:SHOR] && item.quality > 50
   end
 
-  def check_if_quality_is_eighty(item)
+  def check_if_quality_is_not_eighty(item)
     item.name == ITEMS[:SHOR] && item.quality != 80
   end
 
@@ -35,8 +35,8 @@ class GildedRose
     if item.name != ITEMS[:AB] && item.name != ITEMS[:BPTATC]
       if item.name == ITEMS[:CR]
         item.quality -= 2
-      else
-        item.quality -= 1 if item.quality.positive? && (item.name != ITEMS[:SHOR])
+      elsif item.quality.positive? && (item.name != ITEMS[:SHOR])
+        item.quality -= 1
       end
     elsif item.quality < 50
       item.quality = item.quality + 1
@@ -48,9 +48,7 @@ class GildedRose
   end
 
   def check_quality(item)
-    if item.quality.negative?
-      item.quality = 0
-    end
+    item.quality = 0 if item.quality.negative?
     if item.sell_in.negative?
       if item.name != ITEMS[:AB]
         if item.name != ITEMS[:BPTATC]
@@ -79,19 +77,13 @@ class Item
   end
 end
 
-item_three = Item.new('Conjured', 5, 10)
+# item_three = Item.new('Conjured', 5, 10)
 
-arr_items = [item_three]
+# arr_items = [item_three]
 
-x = GildedRose.new(arr_items)
+# x = GildedRose.new(arr_items)
 
-puts x.update_quality
-puts x.update_quality
-puts x.update_quality
-puts x.update_quality
-puts x.update_quality
-puts x.update_quality
-
-puts x.update_quality
-
-puts x.update_quality
+# puts x.update_quality
+# puts x.update_quality
+# puts x.update_quality
+# puts x.update_quality
