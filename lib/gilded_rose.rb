@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative 'item'
 
 # Main class
 class GildedRose
@@ -28,7 +29,7 @@ class GildedRose
     check_type(item)
     item.sell_in -= 1 if i_name != ITEMS[:SHOR]
     check_quality(item)
-    "#{i_name}, #{item.sell_in}, #{item.quality}"
+    return "#{i_name}, #{item.sell_in}, #{item.quality}"
   end
 
   def check_if_quality_is_not_eighty(item)
@@ -43,11 +44,10 @@ class GildedRose
 
   def check_type(item)
     i_name = item.name
-    i_quality = item.quality
     if i_name != ITEMS[:AB] && i_name != ITEMS[:BPTATC]
       name_equal_conjured(item)
-    elsif i_quality < 50
-      i_quality = i_quality + 1
+    elsif item.quality < 50
+      item.quality = item.quality + 1
       name_equal_baskstage(item)
     end
   end
@@ -85,29 +85,13 @@ class GildedRose
   end
 end
 
-# Second class
-class Item
-  # Class called by GildedRose
-  attr_accessor :name, :sell_in, :quality
+item_three = Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 40)
 
-  def initialize(name, sell_in, quality)
-    @name = name
-    @sell_in = sell_in
-    @quality = quality
-  end
+arr_items = [item_three]
 
-  def to_s
-    "#{@name}, #{@sell_in}, #{@quality}"
-  end
-end
+x = GildedRose.new(arr_items)
 
-# item_three = Item.new('Conjured', 5, 10)
-
-# arr_items = [item_three]
-
-# x = GildedRose.new(arr_items)
-
-# puts x.update_quality
-# puts x.update_quality
-# puts x.update_quality
-# puts x.update_quality
+puts x.update_quality
+puts x.update_quality
+puts x.update_quality
+puts x.update_quality
